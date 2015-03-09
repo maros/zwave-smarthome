@@ -292,7 +292,7 @@ a {
 
 /* line 48, sass/globals/_body.scss */
 a:hover {
-  color: #ef4a54;
+  color: #0096f1;
 }
 
 /* line 52, sass/globals/_body.scss */
@@ -441,7 +441,7 @@ a:hover {
 
 /* line 160, sass/globals/_body.scss */
 .nav-tabs > li.active > a i {
-  color: #DA131F;
+  color: #0066A4;
 }
 
 /*.nav > li > a:hover, .nav > li > a:focus {
@@ -533,14 +533,14 @@ vertical-align: middle;
 -------------------------------------------------- */
 /* line 241, sass/globals/_body.scss */
 .pagination > li > a, .pagination > li > span {
-  color: #DA131F;
+  color: #0066A4;
   background-color: #FFF;
   border: 1px solid #d3d3d3;
 }
 
 /* line 247, sass/globals/_body.scss */
 .pagination > li > a:hover, .pagination > li > a:focus, .pagination > li > span:hover, .pagination > li > span:focus {
-  color: #DA131F;
+  color: #0066A4;
   background-color: #F6F6F6;
   border-color: #d3d3d3;
 }
@@ -580,7 +580,7 @@ vertical-align: middle;
 }
 /* line 16, sass/globals/_navigation.scss */
 .navbar-visible .navbar-visible-in .header-logo img {
-  max-height: 25px;
+  max-height: 35px;
   max-width: 60px;
 }
 /* line 21, sass/globals/_navigation.scss */
@@ -591,7 +591,7 @@ vertical-align: middle;
 .navbar-visible .navbar-visible-in a {
   display: inline-block;
   padding: 0 15px;
-  color: #5d5d5d;
+  color: #fff;
   line-height: 50px;
 }
 /* line 29, sass/globals/_navigation.scss */
@@ -600,107 +600,108 @@ vertical-align: middle;
 }
 /* line 33, sass/globals/_navigation.scss */
 .navbar-visible .navbar-visible-in a:hover {
-  color: #DA131F;
+  background-color: #00376D;
 }
 /* line 36, sass/globals/_navigation.scss */
 .navbar-visible .navbar-visible-in .active {
-  background-color: #DDDDDD;
-  color: #DA131F;
+  background-color: #00376D;
+  color: #16a4f7;
 }
 
 /* line 43, sass/globals/_navigation.scss */
 .navi-time {
   padding-left: 10px;
+  color: #fff;
 }
 
-/* line 47, sass/globals/_navigation.scss */
+/* line 48, sass/globals/_navigation.scss */
 .lang-switch {
   text-transform: uppercase;
 }
 
-/* line 50, sass/globals/_navigation.scss */
+/* line 51, sass/globals/_navigation.scss */
 .lang-switch-current {
   display: inline-block;
   width: 24px;
   height: 24px;
 }
 
-/* line 56, sass/globals/_navigation.scss */
+/* line 57, sass/globals/_navigation.scss */
 .navbar-inverse {
-  background-color: #E9E9E9;
+  background-color: #0066A4;
   border-color: transparent;
-  border-bottom: solid 4px #DDDDDD;
-  color: #DDDDDD;
+  border-bottom: solid 4px #00376D;
+  color: #00376D;
 }
-/* line 62, sass/globals/_navigation.scss */
+/* line 63, sass/globals/_navigation.scss */
 .navbar-inverse .navbar-nav .dropdown-toggle {
-  color: #5d5d5d;
+  color: #fff;
 }
-/* line 65, sass/globals/_navigation.scss */
+/* line 66, sass/globals/_navigation.scss */
 .navbar-inverse .navbar-nav .dropdown-toggle:hover {
-  color: #5d5d5d;
+  color: #fff;
 }
 
-/* line 71, sass/globals/_navigation.scss */
+/* line 72, sass/globals/_navigation.scss */
 .navbar-inverse_ .navbar-nav .dropdown-toggle {
-  color: #DDDDDD;
+  color: #00376D;
 }
 
 /* Collapse */
-/* line 76, sass/globals/_navigation.scss */
+/* line 77, sass/globals/_navigation.scss */
 .navbar-inverse .navbar-nav > .active > a,
 .navbar-inverse .navbar-nav > .active > a:hover,
 .navbar-inverse .navbar-nav > .active > a:focus {
-  background-color: #DDDDDD;
+  background-color: #00376D;
 }
 
-/* line 82, sass/globals/_navigation.scss */
+/* line 83, sass/globals/_navigation.scss */
 .navbar-inverse .navbar-nav > .open > a,
 .navbar-inverse .navbar-nav > .open > a:hover,
 .navbar-inverse .navbar-nav > .open > a:focus {
-  background-color: #DDDDDD;
-  color: #DA131F;
+  background-color: #00376D;
+  color: #16a4f7;
 }
 
-/* line 89, sass/globals/_navigation.scss */
+/* line 90, sass/globals/_navigation.scss */
 .navbar-inverse .dropdown-menu > .active > a,
 .navbar-inverse .dropdown-menu > .active > a:hover,
 .navbar-inverse .dropdown-menu > .active > a:focus {
-  background-color: #DDDDDD;
-  color: #5d5d5d;
+  background-color: #0066A4;
+  color: #fff;
 }
 
-/* line 98, sass/globals/_navigation.scss */
+/* line 99, sass/globals/_navigation.scss */
 .navbar-inverse .dropdown-menu > li > a:hover,
 .navbar-inverse .dropdown-menu > li > a:focus {
-  background-color: #DDDDDD;
-  color: #DA131F;
+  background-color: #0066A4;
+  color: #fff;
 }
 
-/* line 104, sass/globals/_navigation.scss */
+/* line 105, sass/globals/_navigation.scss */
 .navbar .divider-vertical {
   height: 50px;
   /*    margin: 0 9px;*/
-  border-left: 1px solid #c4c4c4;
-  border-right: 1px solid white;
+  border-left: 1px solid #001d3a;
+  border-right: 1px solid #005eba;
 }
 
-/* line 110, sass/globals/_navigation.scss */
+/* line 111, sass/globals/_navigation.scss */
 .dropdown-menu {
-  border: 1px solid #DDDDDD;
+  border: 1px solid #fff;
 }
-/* line 113, sass/globals/_navigation.scss */
+/* line 114, sass/globals/_navigation.scss */
 .dropdown-menu .divider {
   background-color: #DDDDDD;
 }
 
-/* line 118, sass/globals/_navigation.scss */
+/* line 119, sass/globals/_navigation.scss */
 .navbar-nav > li > a {
   padding-top: 15px;
   padding-bottom: 10px;
 }
 
-/* line 123, sass/globals/_navigation.scss */
+/* line 124, sass/globals/_navigation.scss */
 .dropdown > .dropdown-menu::before, .dropdown > .dropdown-menu::after {
   content: '';
   display: inline-block;
@@ -714,7 +715,7 @@ vertical-align: middle;
   right: 12px;
 }
 
-/* line 137, sass/globals/_navigation.scss */
+/* line 138, sass/globals/_navigation.scss */
 .dropdown > .dropdown-menu::after {
   border-left-width: 6px;
   border-right-width: 6px;
@@ -729,23 +730,23 @@ vertical-align: middle;
     left: auto;
     right: 13px;
 }*/
-/* line 153, sass/globals/_navigation.scss */
+/* line 154, sass/globals/_navigation.scss */
 .only-icon .only-icon-menu i {
   font-size: 18px;
 }
 
-/* line 157, sass/globals/_navigation.scss */
+/* line 158, sass/globals/_navigation.scss */
 .only-icon-menu span {
   display: none;
 }
 
-/* line 161, sass/globals/_navigation.scss */
+/* line 162, sass/globals/_navigation.scss */
 .dropdown-menu a i {
   padding-right: 10px;
 }
 
 /** Profile colors */
-/* line 165, sass/globals/_navigation.scss */
+/* line 166, sass/globals/_navigation.scss */
 .profile-6494bc {
   /* Visible */
 }
@@ -758,7 +759,7 @@ vertical-align: middle;
   border-color: #abc5db;
 }
 
-/* line 168, sass/globals/_navigation.scss */
+/* line 169, sass/globals/_navigation.scss */
 .profile-80ad80 {
   /* Visible */
 }
@@ -771,7 +772,7 @@ vertical-align: middle;
   border-color: #bed5be;
 }
 
-/* line 172, sass/globals/_navigation.scss */
+/* line 173, sass/globals/_navigation.scss */
 .profile-dd976e {
   /* Visible */
 }
@@ -1181,7 +1182,7 @@ padding-right: 5px;
 /* line 3, sass/modules/_profile.scss */
 .profile-entry {
   padding: 0;
-  background-color: #E9E9E9;
+  background-color: #0066A4;
 }
 
 /* line 7, sass/modules/_profile.scss */
@@ -1524,15 +1525,15 @@ padding-right: 5px;
   }
   /* line 110, sass/settings/_mixins.scss */
   .is-mobile-true .navbar-inverse .navbar-toggle {
-    border-color: #5d5d5d;
+    border-color: #fff;
   }
   /* line 114, sass/settings/_mixins.scss */
   .is-mobile-true .navbar-inverse .navbar-toggle .icon-bar {
-    background-color: #5d5d5d;
+    background-color: #fff;
   }
   /* line 117, sass/settings/_mixins.scss */
   .is-mobile-true .navbar-inverse .navbar-collapse, .is-mobile-true .navbar-inverse .navbar-form {
-    border-color: #DDDDDD;
+    border-color: #00376D;
   }
   /* line 120, sass/settings/_mixins.scss */
   .is-mobile-true .navbar-inverse .navbar-nav .open .dropdown-menu .divider {
@@ -1540,8 +1541,8 @@ padding-right: 5px;
   }
   /* line 123, sass/settings/_mixins.scss */
   .is-mobile-true .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a, .is-mobile-true .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:hover, .is-mobile-true .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:focus {
-    color: #5d5d5d;
-    background-color: #DDDDDD;
+    color: #fff;
+    background-color: #00376D;
   }
   /* line 127, sass/settings/_mixins.scss */
   .is-mobile-true #main_content {
@@ -1980,17 +1981,17 @@ padding-right: 5px;
 
   /* line 110, sass/settings/_mixins.scss */
   .navbar-inverse .navbar-toggle {
-    border-color: #5d5d5d;
+    border-color: #fff;
   }
 
   /* line 114, sass/settings/_mixins.scss */
   .navbar-inverse .navbar-toggle .icon-bar {
-    background-color: #5d5d5d;
+    background-color: #fff;
   }
 
   /* line 117, sass/settings/_mixins.scss */
   .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
-    border-color: #DDDDDD;
+    border-color: #00376D;
   }
 
   /* line 120, sass/settings/_mixins.scss */
@@ -2000,8 +2001,8 @@ padding-right: 5px;
 
   /* line 123, sass/settings/_mixins.scss */
   .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a, .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:focus {
-    color: #5d5d5d;
-    background-color: #DDDDDD;
+    color: #fff;
+    background-color: #00376D;
   }
 
   /* line 127, sass/settings/_mixins.scss */

@@ -154,7 +154,7 @@ a:hover {
 }
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
     color:  lighten($brand-color-primary, 10%);
-    background-color: $header-color-secondary;
+    background-color: $footer-border-color;
     border: darken($app-body-bcg-color, 10%);
 }
 .nav-tabs > li.active > a i {
