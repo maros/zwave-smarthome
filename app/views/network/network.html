@@ -8,11 +8,11 @@
                     <i class="fa fa-bolt fa-lg tab-icon"></i> <span class="tab-name">{{_t('lb_battery_status')}}</span>
                 </a>
             </li>
-            <li ng-class="activeTab == 'zwave' ? 'active' : ''">
+            <!--<li ng-class="activeTab == 'zwave' ? 'active' : ''">
                 <a href="" title="{{_t('lb_zwave_devices')}}" data-target="#module_zwave" data-toggle="tab" ng-click="setTab('zwave')">
                     <i class="fa fa-wifi fa-lg tab-icon"></i> <span class="tab-name">{{_t('lb_zwave_devices')}}</span>
                 </a>
-            </li>
+            </li>-->
             <li ng-class="activeTab == 'health' ? 'active' : ''">
                 <a href="" title="{{_t('nav_network_health')}}" data-target="#module_health" data-toggle="tab" ng-click="setTab('health')">
                     <i class="fa fa-cog fa-sitemap tab-icon"></i> <span class="tab-name">{{_t('lb_network_status')}}</span> 
@@ -24,12 +24,11 @@
     <div class="tab-content">
         <!-- Battery -->
         <div class="tab-pane" id="module_battery" ng-class="activeTab == 'battery' ? 'active' : ''">
-            <br />
-            <p>
+            <!-- <p>
             <span ng-if="batteries.list.length > 0"><strong ng-bind="batteries.list.length"></strong> <span ng-bind="_t('lb_battery_devices')"></span>,</span>
             <span ng-if="batteries.cntLess20.length > 0"><strong ng-bind="batteries.cntLess20.length"></strong> <span ng-bind="_t('lb_battery_20')"></span>, </span> 
             <span ng-if="batteries.cnt0.length > 0"><strong  ng-bind="batteries.cnt0.length"></strong> <span ng-bind="_t('lb_battery_0')"></span> </span>
-        </p>
+        </p>-->
         <table class="table table-report table-condensed">
             <tbody>
                 <tr ng-repeat="v in devices.batteries| orderBy:'level':false" id="row_battery_{{ v.rowId}}">
