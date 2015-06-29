@@ -36,11 +36,17 @@
 
                     </td>
                     <td>
-                        <span class="text-supp event-date" title="{{v.timestamp| date:'dd.MM.yyyy H:mm'}}" ng-bind="v.timestamp | eventDate"></span> <span class="hide-on-mobile">|</span> 
-                        <a href="#element/{{v.source}}" ng-if="v.source && v.message">
+                        <span class="text-supp event-date" title="{{v.timestamp| date:'dd.MM.yyyy H:mm'}}" ng-bind="v.timestamp | eventDate"></span> <span class="hide-on-mobile">|</span>
+                        <span  ng-if="v.source && v.message">
+                        <a ng-href="#element/{{v.source}}" ng-if="elementAccess(cfg.role_access.element) && (cfg.events_clickable.indexOf(v.level) > -1)">
                             <span ng-if="v.message | hasNode:'l'"> <span ng-bind="v.message.dev"></span> {{_t('lb_is')}} <strong ng-bind="v.message.l"></strong></span>
                             <span ng-if="!(v.message | hasNode:'l')" ng-bind="v.message"></span>
-                        </a>
+                         </a>
+                         <span  ng-if="!elementAccess(cfg.role_access.element) || (cfg.events_clickable.indexOf(v.level) === -1)">
+                            <span ng-if="v.message | hasNode:'l'"> <span ng-bind="v.message.dev"></span> {{_t('lb_is')}} <strong ng-bind="v.message.l"></strong></span>
+                            <span ng-if="!(v.message | hasNode:'l')" ng-bind="v.message"></span>
+                         </span>
+                         </span>
                         <span class="report-message" ng-bind="v.message" ng-if="!v.source && !v.message"></span>
                     </td>
                     <td class="td-action">
@@ -66,19 +72,19 @@
                                         <i class="fa fa-check-circle"></i> <span ng-bind="_t('lb_events_source_type')"></span>
                                     </a>
                                 </li>
-                                <li ng-if="v.source && v.message">
+                                <li ng-if="elementAccess(cfg.role_access.element) && (cfg.events_clickable.indexOf(v.level) > -1) && (v.source && v.message)">
                                     <a href="#element/{{v.source}}">
                                         <i class="fa fa-cog"></i> <span ng-bind="_t('lb_source_cfg')"></span>   
                                     </a>
                                 </li> 
                                 <li>
 
-                                    <a href=""ng-click="hideSourceEvents(v.source)" 
+                                    <a href="" ng-click="hideSourceEvents(v.source)" 
                                        ng-if="user.hide_single_device_events.indexOf(v.source) === -1">
                                         <i class="fa fa-minus-circle text-danger"></i> <span  ng-bind="_t('lb_hide_events_source')" ></span>
                                     </a>
                                 </li>
-                                <li>
+                                <li ng-if="elementAccess(cfg.role_access.event_delete)">
                                     <a href=""ng-click="deleteEvent(v.id, '?uid=' + v.h, '#row_' + v.id)" ng-if="v.level == 'error' || v.level == 'notification'">
                                         <i class="fa fa-times text-danger"></i> <span  ng-bind="_t('lb_delete_event')" ></span>
                                     </a>
@@ -90,6 +96,7 @@
                 </tr>
             </tbody>
         </table>
+        <div class="info-lert" ng-if="user.hide_all_device_events || user.hide_system_events"><i class="fa fa-info-circle text-info"></i> <span ng-bind="_t('events_hidden')"></span></div>
         <div class="text-center mobile-padding" ng-if="collection.length > 0">
             <dir-pagination-controls boundary-links="true"></dir-pagination-controls>
         </div>

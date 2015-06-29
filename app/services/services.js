@@ -7,7 +7,7 @@ var myAppService = angular.module('myAppService', []);
 /**
  * Device service
  */
-myAppService.service('dataService', function($filter, $log, $cookies, $location, myCache, cfg) {
+myAppService.service('dataService', function($filter, $log, $cookies, $location, $window,myCache, cfg) {
     /// --- Public functions --- ///
     /**
      * Get language line by key
@@ -85,6 +85,18 @@ myAppService.service('dataService', function($filter, $log, $cookies, $location,
     };
     
      /**
+     * Get user SID (token)
+     */
+    this.getZWAYSession = function() {
+        return getZWAYSession();
+    };
+    /**
+     * Set user SID (token)
+     */
+    this.setZWAYSession = function(sid) {
+        return setZWAYSession(sid);
+    };
+     /**
      * Get last login
      */
     this.getLastLogin = function() {
@@ -97,6 +109,14 @@ myAppService.service('dataService', function($filter, $log, $cookies, $location,
    this.setLastLogin = function(val) {
        return setLastLogin(val);
    };
+   
+   /**
+     * Logout
+     */
+    this.logOut = function() {
+        return logOut();
+
+    };
 
     /**
      * Get data or filtered data
@@ -221,8 +241,30 @@ myAppService.service('dataService', function($filter, $log, $cookies, $location,
      * Set user data
      */
     function setUser(data) {
+         if(!data){
+            delete $cookies['user'];
+            return;
+        }
         $cookies.user = angular.toJson(data);
         return data;
+
+    }
+    /**
+     * Get user SID (token)
+     */
+    function getZWAYSession() {
+         return $cookies.ZWAYSession;
+
+    }
+    /**
+     * Set user SID (token)
+     */
+    function setZWAYSession(sid) {
+        if(!sid){
+            delete $cookies['ZWAYSession'];
+            return;
+        }
+        $cookies.ZWAYSession = sid;
 
     }
     
@@ -241,10 +283,21 @@ myAppService.service('dataService', function($filter, $log, $cookies, $location,
         $cookies.lastLogin = val;
 
     }
+    
+    /**
+     * Logout
+     */
+    function logOut() {
+        setUser(null);
+        setZWAYSession(null);
+        $window.location.href = '#/';
+        $window.location.reload();
+
+    }
 
 
     /**
-     * Get data or filtered data
+     * Get API data or filtered data
      */
     function getData(data, filter) {
         if (!filter) {
@@ -294,8 +347,8 @@ myAppService.service('dataService', function($filter, $log, $cookies, $location,
                     return;
                 }
             }
-           
-            if (v.id.indexOf(findZwaveStr) > -1) {
+           if(instances){
+               if (v.id.indexOf(findZwaveStr) > -1) {
                 zwaveId = v.id.split(findZwaveStr)[1].split('-')[0];
             } else {
                 instance = getRowBy(instances, 'id', v.creatorId);
@@ -304,6 +357,8 @@ myAppService.service('dataService', function($filter, $log, $cookies, $location,
 
                 }
             }
+           }
+            
             if (dashboard && dashboard.indexOf(v.id) !== -1) {
                 var onDashboard = true;
             }
@@ -485,17 +540,17 @@ myAppService.service('dataService', function($filter, $log, $cookies, $location,
         var cnt = 0;
         angular.forEach(data, function(v, k) {
             cnt++;
-            var time = $filter('date')(v.id * 1000, 'H:mm');
+            var time = $filter('date')(((v.id) * 1000), 'H:mm');
             //if (v.id > currTime && out.labels.indexOf(time) === -1) {
             //if (v.id > currTime && (cnt % 2)) {
-            if (v.id > currTime && (cnt % 2)) {
+            if (v.id > currTime && (cnt % 2) === 0) {
                 out.labels.push(time);
                 //out.labels.push($filter('date')(v.timestamp,'dd.MM.yyyy H:mm'));
                 out.datasets[0].data.push(v.l);
             }
 
         });
-        if (out.datasets[0].data.length > 1) {
+        if (out.datasets[0].data.length > 0) {
             return out;
         }
         return null;

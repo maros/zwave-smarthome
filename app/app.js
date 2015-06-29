@@ -17,13 +17,17 @@ var myApp = angular.module('myApp', [
 ]);
 
 //Define Routing for app
-myApp.config(['$routeProvider',
-    function($routeProvider) {
+myApp.config(['$routeProvider', function($routeProvider) {
+        var cfg = config_data.cfg;
         $routeProvider.
-                // Home
+                // Login
                 when('/', {
                     //redirectTo: '/elements/dashboard/1'
                     templateUrl: 'app/views/login/login.html'
+                }).
+                 // Home
+                when('/home', {
+                   redirectTo: '/elements/dashboard/1'
                 }).
                 // Elements
                 when('/elements/:filter?/:val?/:name?', {
@@ -33,13 +37,14 @@ myApp.config(['$routeProvider',
                 // Element
                 when('/element/:id', {
                     templateUrl: 'app/views/elements/element.html',
-                    requireLogin: true
+                    requireLogin: true,
+                    roles: cfg.role_access.element
                 }).
                 // Rooms
                 when('/rooms', {
                     templateUrl: 'app/views/rooms/rooms.html',
-                    requireLogin: true
-                            //roles: [1,2]
+                    requireLogin: true,
+                    roles: cfg.role_access.rooms
                 }).
                 // Events
                 when('/events/:param?/:val?', {
@@ -50,63 +55,84 @@ myApp.config(['$routeProvider',
                 when('/admin', {
                     templateUrl: 'app/views/admin/admin.html',
                     requireLogin: true,
-                    roles: [1]
+                    roles: cfg.role_access.admin
                 }).
                 //Admin detail
                 when('/admin/user/:id', {
                     templateUrl: 'app/views/admin/admin_user.html',
                     requireLogin: true,
-                    roles: [1]
+                    roles: cfg.role_access.admin_user
                 }).
                 //My Access
                 when('/myaccess', {
                     templateUrl: 'app/views/myaccess/myaccess.html',
-                    requireLogin: true
+                    requireLogin: true,
+                    roles: cfg.role_access.myaccess
                 }).
                 //Apps
                 when('/apps', { 
                     templateUrl: 'app/views/apps/apps.html',
                      requireLogin: true,
-                    roles: [1]
+                    roles: cfg.role_access.apps
                 }).
                 //Apps - local detail
                 when('/apps/local/:id', {
                     templateUrl: 'app/views/apps/app_local_detail.html',
                     requireLogin: true,
-                    roles: [1]
+                    roles: cfg.role_access.apps_local
                 }).
                 //Apps - online detail
                 when('/apps/online/:id', {
                     templateUrl: 'app/views/apps/app_online_detail.html',
                     requireLogin: true,
-                    roles: [1]
+                   roles: cfg.role_access.apps_online
                 }).
                 //Module
                 when('/module/:action/:id', {
                     templateUrl: 'app/views/apps/app_module_alpaca.html',
                     requireLogin: true,
-                    roles: [1]
+                    roles: cfg.role_access.module
                 }).
                 //Devices_
-                when('/devices/:type?', {
+                when('/devices', {
                     templateUrl: 'app/views/devices/devices.html',
-                    requireLogin: true
+                    requireLogin: true,
+                    roles: cfg.role_access.devices
+                }).
+                //Zwave device
+                when('/devices/zwave/:brandname?', {
+                    templateUrl: 'app/views/devices/devices_zwave.html',
+                    requireLogin: true,
+                    roles: cfg.role_access.devices
+                }).
+                //IP camera device
+                when('/devices/ipcamera', {
+                    templateUrl: 'app/views/devices/devices_ipcamera.html',
+                    requireLogin: true,
+                    roles: cfg.role_access.devices
+                }).
+                //IP camera device
+                when('/devices/enocean', {
+                    templateUrl: 'app/views/devices/devices_enocean.html',
+                    requireLogin: true,
+                    roles: cfg.role_access.devices
                 }).
                 //Include Devices
                 when('/include/:device?', {
                     templateUrl: 'app/views/devices/device_include.html',
-                    requireLogin: true
+                    requireLogin: true,
+                    roles: cfg.role_access.devices_include
                 }).
                 //Rooms
                 when('/config-rooms', {
                     templateUrl: 'app/views/rooms/config_rooms.html',
                     requireLogin: true,
-                    roles: [1]
+                    roles: cfg.role_access.config_rooms
                 }).
                 when('/config-rooms/:id', {
                     templateUrl: 'app/views/rooms/config_rooms_edit.html',
                     requireLogin: true,
-                    roles: [1]
+                    roles: cfg.role_access.config_rooms_id
                 }).
                 //Network
                 when('/network', {
@@ -117,7 +143,7 @@ myApp.config(['$routeProvider',
                 when('/network/config/:nodeId', {
                     templateUrl: 'app/views/network/config.html',
                     requireLogin: true,
-                     roles: [1]
+                    roles: cfg.role_access.network_config_id
                 }).
                 //Device configuration
                 when('/deviceconfig/:nodeId', {
@@ -126,23 +152,29 @@ myApp.config(['$routeProvider',
                 }).
                 //Report
                 when('/report', {
-                    templateUrl: 'app/views/report/report.html'
+                    templateUrl: 'app/views/report/report.html',
+                    requireLogin: true
                 }).
                 //Login
                 when('/login', {
-                    templateUrl: 'app/views/login/login.html'
+                    redirectTo: '/'
+                    //templateUrl: 'app/views/login/login.html',
                 }).
                 //Login
                 when('/logout', {
                     templateUrl: 'app/views/login/logout.html',
                     requireLogin: true
                 }).
+                // Error page
+                when('/error/:code?', {
+                    templateUrl: 'app/views/error.html'
+                }).
                 // Test
                 when('/test', {
                     templateUrl: 'app/views/test.html'
                 }).
                 otherwise({
-                    redirectTo: '/elements/dashboard/1'
+                    redirectTo: '/error/404'
                 });
     }]);
 
@@ -172,7 +204,7 @@ myApp.run(function($rootScope, $location, dataService) {
         var user;
         if (next.requireLogin) {
             user = dataService.getUser();
-            if (!user || user.id < 1) {
+            if (!user) {
                 //alert('You need to be authenticated to see this page!');
                 //event.preventDefault();
                 $location.path('/');
@@ -180,8 +212,9 @@ myApp.run(function($rootScope, $location, dataService) {
             }
             if (next.roles && angular.isArray(next.roles)) {
                 if (next.roles.indexOf(user.role) === -1) {
-                    alert('You have no permissions t see this page!');
-                    $location.path('/elements');
+                    //alert('You have no permissions to see this page!');
+                    //$location.path('/elements');
+                     $location.path('/error/403');
                     return;
                 }
             }
@@ -189,47 +222,54 @@ myApp.run(function($rootScope, $location, dataService) {
     });
 });
 
-
-
 // Intercepting HTTP calls with AngularJS.
 myApp.config(function($provide, $httpProvider) {
     $httpProvider.defaults.timeout = 5000;
     // Intercept http calls.
-    $provide.factory('MyHttpInterceptor', function($q) {
+    $provide.factory('MyHttpInterceptor', function($q,$location,dataService) {
+         var path = $location.path().split('/');
         return {
             // On request success
             request: function(config) {
-                //console.log(config); // Contains the data about the request before it is sent.
-
                 // Return the config or wrap it in a promise if blank.
                 return config || $q.when(config);
             },
             // On request failure
             requestError: function(rejection) {
-                console.log(rejection); // Contains the data about the error on the request.
-
                 // Return the promise rejection.
                 return $q.reject(rejection);
             },
             // On response success
             response: function(response) {
-                //console.log(response.data); // Contains the data from the response.
-
                 // Return the response or promise.
                 return response || $q.when(response);
             },
             // On response failture
             responseError: function(rejection) {
-                // console.log(rejection); // Contains the data about the error.
-
-                // Return the promise rejection.
-                return $q.reject(rejection);
+                dataService.logError(rejection);
+               if(rejection.status == 401){
+                  
+                   //$cookies.user = undefined;
+                   if(path[1] !== ''){
+                        dataService.logOut();
+                   }
+                   return $q.reject(rejection);
+                    
+                }else if(rejection.status == 403){
+                    $location.path('/error/403');
+                    return $q.reject(rejection);
+                }else{
+                    // Return the promise rejection.
+                    return $q.reject(rejection);
+                }
+                //
+                
             }
         };
     });
 
     // Add the interceptor to the $httpProvider.
-    //$httpProvider.interceptors.push('MyHttpInterceptor');
+    $httpProvider.interceptors.push('MyHttpInterceptor');
 
 });
 

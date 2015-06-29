@@ -9,6 +9,15 @@ myApp.directive('testDir', function() {
         template: '<p>This is a test directive</p>'
     };
 });
+
+myApp.directive('logIt', function() {
+    return {
+        link: function(scope, elem, attrs) {
+            console.log(attrs.logIt);
+        }
+    };
+}
+);
 /**
  * History go back
  */
@@ -33,6 +42,36 @@ myApp.directive('bbLoader', function() {
         template: '<div id="loading" ng-show="loading" ng-class="loading.status"><div class="loading-in">'
                 + '<i class="fa fa-lg" ng-class="loading.icon"></i> <span ng-bind-html="loading.message|toTrusted"></span>'
                 + '</div></div>'
+    };
+});
+
+/**
+ * Alert directive
+ */
+myApp.directive('bbAlert', function() {
+    return {
+        restrict: "E",
+        replace: true,
+        scope: {alert: '='},
+        template: '<div class="alert" ng-if="alert.message" ng-class="alert.status">'
+                + '<i class="fa fa-lg" ng-class="alert.icon"></i> <span ng-bind-html="alert.message|toTrusted"></span>'
+                + '</div>'
+    };
+});
+
+/**
+ * Show validation error
+ */
+myApp.directive('bbValidator', function($window) {
+    return {
+        restrict: "E",
+        replace: true,
+        scope: {
+            inputName: '=',
+            trans: '=',
+            hasBlur: '='
+        },
+        template: '<div class="valid-error text-danger" ng-if="inputName.$invalid && !inputName.$pristine && hasBlur">*{{trans}}</div>'
     };
 });
 
@@ -252,12 +291,15 @@ myApp.directive('infiniteScroll', [
         };
     }
 ]);
-myApp.directive('ngsearchtext', function () {
-    return function (scope, element, attrs) {
-        element.bind("keyup", function (event) {
+/**
+ * Key event directive
+ */
+myApp.directive('bbKeyEvent', function() {
+    return function(scope, element, attrs) {
+        element.bind("keyup", function(event) {
             if (event.which !== 13) {
-                scope.$apply(function () {
-                    scope.$eval(attrs.ngsearchtext);
+                scope.$apply(function() {
+                    scope.$eval(attrs.bbKeyEvent);
                 });
 
                 event.preventDefault();

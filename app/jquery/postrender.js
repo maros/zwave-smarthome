@@ -7,6 +7,10 @@ var postRenderAlpaca = function(renderedForm) {
         var data = postRenderAlpacaData(renderedForm);
         var url = config_data.cfg.server_url + config_data.cfg.api['instances'] + (data.instanceId > 0 ? '/' + data.instanceId : '');
         var type = (data.instanceId > 0 ? 'PUT' : 'POST');
+        var sid = $(this).data('sid');
+        var lang = $(this).data('lang');
+//        console.log(sid)
+//        return;
         // submit via ajax
         $.ajax({
             type: type,
@@ -14,17 +18,20 @@ var postRenderAlpaca = function(renderedForm) {
             url: url,
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
+            headers: {
+                'Accept-Language': lang,
+                'ZWAYSession': sid
+            },
             data: JSON.stringify(data),
             beforeSend: function() {
                 console.log(data);
                 return; 
-                $('.module-spinner').show();
+                //$('.module-spinner').show();
             },
             success: function(response) {
                  $('.module-spinner').fadeOut();
-                 //if(type == 'POST'){
-                     window.location.replace("#apps");
-                //}
+                 window.location.replace("#apps");
+                 window.location.reload(true);
             },
             error: function(xhr, ajaxOptions, thrownError) {
                  $('.module-spinner').fadeOut();

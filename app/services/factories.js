@@ -14,14 +14,12 @@ myAppFactory.factory('myCache', function($cacheFactory) {
 /**
  * Main data factory
  */
-myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window, $filter, $timeout, $q, myCache, dataService, cfg) {
+myAppFactory.factory('dataFactory', function($http,$filter, $q, myCache, dataService, cfg) {
     var updatedTime = Math.round(+new Date() / 1000);
     var lang = cfg.lang;
-
-    var profileSID = null;
+    var ZWAYSession = dataService.getZWAYSession();
     var user = dataService.getUser();
     if (user && user.sid) {
-        profileSID = user.sid;
         lang = user.lang;
 
     }
@@ -96,28 +94,31 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
 
         if (!noCache && cached) {
             var deferred = $q.defer();
-            deferred.resolve(cached); // <-- Can I do this?
+            deferred.resolve(cached);
             return deferred.promise;
         }
-
         return $http({
             method: 'get',
             url: cfg.server_url + cfg.api[api] + (params ? params : ''),
             headers: {
                 'Accept-Language': lang,
-                'Profile-SID': profileSID
+                'ZWAYSession': ZWAYSession
                         //'Accept-Encoding': 'gzip, deflate',
                         //'Allow-compression': 'gz' 
             }
         }).then(function(response) {
+            if(!angular.isDefined(response.data)){
+                return $q.reject(response);
+            }
             if (typeof response.data === 'object') {
                 myCache.put(cacheName, response);
                 return response;
             } else {// invalid response
                 return $q.reject(response);
             }
+            
         }, function(response) {// something went wrong
-            return $q.reject(response);
+           return $q.reject(response);
         });
     }
     // Post api data
@@ -128,9 +129,7 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
             url: cfg.server_url + cfg.api[api] + (params ? params : ''),
 			headers: {
                 'Accept-Language': lang,
-                'Profile-SID': profileSID
-                        //'Accept-Encoding': 'gzip, deflate',
-                        //'Allow-compression': 'gz' 
+                'ZWAYSession': ZWAYSession
             }
         }).then(function(response) {
             return response;
@@ -147,9 +146,7 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
             url: cfg.server_url + cfg.api[api] + (id ? '/' + id : '') + (params ? params : ''),
 			headers: {
                 'Accept-Language': lang,
-                'Profile-SID': profileSID
-                        //'Accept-Encoding': 'gzip, deflate',
-                        //'Allow-compression': 'gz' 
+                'ZWAYSession': ZWAYSession 
             }
         }).then(function(response) {
             return response;
@@ -167,9 +164,7 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
             url: cfg.server_url + cfg.api[api] + (id ? '/' + id : '') + (params ? params : ''),
 			headers: {
                 'Accept-Language': lang,
-                'Profile-SID': profileSID
-                        //'Accept-Encoding': 'gzip, deflate',
-                        //'Allow-compression': 'gz' 
+                'ZWAYSession': ZWAYSession
             }
         }).then(function(response) {
             return response;
@@ -186,9 +181,7 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
             url: cfg.server_url + cfg.api[api] + "/" + id + (params ? params : ''),
 			headers: {
                 'Accept-Language': lang,
-                'Profile-SID': profileSID
-                        //'Accept-Encoding': 'gzip, deflate',
-                        //'Allow-compression': 'gz' 
+                'ZWAYSession': ZWAYSession
             }
         }).then(function(response) {
             return response;
@@ -207,7 +200,8 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
             method: 'get',
             url: cfg.server_url + cfg.api_url + "devices/" + cmd,
              headers: {
-                'Accept-Language': lang 
+                'Accept-Language': lang,
+                'ZWAYSession': ZWAYSession
             }
         }).then(function(response) {
             if (response.data.code == 200) {
@@ -244,7 +238,7 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
 
         if (!noCache && cached) {
             var deferred = $q.defer();
-            deferred.resolve(cached); // <-- Can I do this?
+            deferred.resolve(cached); 
             return deferred.promise;
         }
         // NOT Cached data
@@ -271,7 +265,6 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
     function putCfgXml(data) {
         return $http({
             method: "PUT",
-            //dataType: "text", 
             url: cfg.server_url + cfg.cfg_xml_url,
             data: data,
             headers: {
@@ -316,7 +309,7 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
 
         if (!noCache && cached) {
             var deferred = $q.defer();
-            deferred.resolve(cached); // <-- Can I do this?
+            deferred.resolve(cached);
             return deferred.promise;
         }
         // NOT Cached data
@@ -327,14 +320,10 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
                 'Accept-Language': lang 
             }
         }).then(function(response) {
-            if (typeof response.data === 'object') {
-                myCache.put(cacheName, response);
-                return response;
-            } else {// invalid response
-                return $q.reject(response);
-            }
-        }, function(response) {// something went wrong
-            return $q.reject(response);
+             return response;
+        }, function(error) {// something went wrong
+            
+            return $q.reject(error);
         });
     }
 
@@ -345,12 +334,12 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
             method: 'get',
             url: cfg.server_url + cfg.api[api] + '?since=' + updatedTime + (params ? params : ''),
             headers: {
-                'Accept-Language': lang 
+                'Accept-Language': lang,
+                'ZWAYSession': ZWAYSession
             }
         }).then(function(response) {
             if (typeof response.data === 'object') {
                 updatedTime = ($filter('hasNode')(response.data, 'data.updateTime') || Math.round(+new Date() / 1000));
-                //console.log('Response update time:' + response.data.data.updateTime)
                 return response;
             } else {// invalid response
                 return $q.reject(response);
@@ -367,7 +356,10 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
         var uploadUrl = cfg.server_url + cmd;
         return  $http.post(uploadUrl, data, {
             transformRequest: angular.identity,
-            headers: {'Content-Type': undefined}
+            headers: {
+                'Content-Type': undefined,
+                'ZWAYSession': ZWAYSession
+            }
         }).then(function(response) {
             if (typeof response.data === 'object') {
                 return response;
@@ -388,10 +380,10 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
             method: 'get',
             url: cfg.server_url + cfg.zwave_api_url + cmd,
              headers: {
-                'Accept-Language': lang 
+                'Accept-Language': lang ,
+                'ZWAYSession': ZWAYSession
             }
         }).then(function(response) {
-            //return response;
             if (typeof response.data === 'object') {
                 return response;
             } else {// invalid response
@@ -412,7 +404,7 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
 
         if (cached) {
             var deferred = $q.defer();
-            deferred.resolve(cached); // <-- Can I do this?
+            deferred.resolve(cached); 
             return deferred.promise;
         }
         return $http({
@@ -422,7 +414,7 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
             if (typeof response.data === 'object') {
                 myCache.put(langFile, response);
                 return response;
-            } else {// invalid response
+            } else {
                 return $q.reject(response);
             }
         }, function(response) {// something went wrong
@@ -439,7 +431,7 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
         var cached = myCache.get(cacheName);
         if (!noCache && cached) {
             var deferred = $q.defer();
-            deferred.resolve(cached); // <-- Can I do this?
+            deferred.resolve(cached);
             return deferred.promise;
         }
         return $http({
@@ -546,11 +538,11 @@ myAppFactory.factory('dataFactory', function($http, $interval, $cookies, $window
     function postReport(data) {
         return $http({
             method: "POST",
-            //dataType: "text", 
             url: cfg.post_report_url,
             data: $.param(data),
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
+                //'ZWAYSession': ZWAYSession 
             }
         }).then(function(response) {
             return response;

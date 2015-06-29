@@ -15,7 +15,7 @@
                     <!-- Widget header -->
                     <div class="widget-header">
                         <a class="widget-history" href="" ng-click="loadDeviceHistory(v.id)" ng-if="v.hasHistory"><i class="fa fa-history fa-lg"></i></a>
-                        <a class="widget-config" href="#element/{{v.id}}"><i class="fa fa-cog fa-lg"></i></a>
+                        <a class="widget-config" href="#element/{{v.id}}" ng-if="elementAccess(cfg.role_access.element)"><i class="fa fa-cog fa-lg"></i></a>
                     </div>
 
                     <!-- Widget body -->
@@ -87,7 +87,12 @@
 
                             <!------------ switchRGBW ------------>
                             <div  ng-switch-when="switchRGBW" ng-init="rgbVal[v.id] = v.rgbColors">
-                                <div cmdurl="{{cfg.server_url + cfg.api_url}}devices/{{v.id}}/command/exact" class="widget-control control-left widget-click-popup" colorpicker="rgb" ng-model="rgbVal[v.id]" ng-click="showColor = !showColor">
+                                <div class="widget-control control-left widget-click-popup" 
+                                     colorpicker="rgb" ng-model="rgbVal[v.id]"
+                                     cmdurl="{{cfg.server_url + cfg.api_url}}devices/{{v.id}}/command/exact"
+                                     sid="{{ZWAYSession}}"
+                                     lang="{{lang}}"
+                                     ng-click="showColor = !showColor">
                                     <span class="color-picker-show" style="background-color: {{rgbVal[v.id]}};">&nbsp;</span> <span>RGB <i class="fa fa-caret-down"></i></span>
                                 </div>
                                 <div class="widget-control control-right">
@@ -178,7 +183,7 @@
                             <!-- text -->
                             <div ng-switch-when="text">
                                 <div class="widget-control control-left widget-click-popup text">
-                                    <a href="" ng-click="showModal('#modal_promo', {'type': v.deviceType, 'title': v.title, 'text': v.metrics.text, 'url': v.metrics.img})" ng-bind="v.metrics.text|cutText:true:60"></a>
+                                    <a href="" ng-click="showModal('#modal_promo', {'type': v.deviceType, 'title': v.title, 'text': v.metrics.text, 'url': v.metrics.img})" ng-bind="v.metrics.text|stripTags|cutText:true:60"></a>
                                 </div>
                             </div>
 
@@ -274,8 +279,8 @@
                                                     class="dial" 
                                                     data-width="100" 
                                                     data-height="100" 
-                                                    data-min="5"
-                                                    data-max="40" 
+                                                    data-min="6"
+                                                    data-max="28" 
                                                     knob-id="v.id" 
                                                     knob-data="v.level" 
                                                     knob-options="knobopt" 
@@ -284,20 +289,20 @@
                                             </td>
                                             <td>
                                                 <button class="btn btn-primary"
-                                                        data-ng-click="runCmdExact(v.id, '+', 5, 40)"
+                                                        data-ng-click="runCmdExact(v.id, '+', 6, 28)"
                                                         >
                                                     <i class="fa fa-angle-up fa-lg"></i>
                                                 </button>&nbsp;
                                                 <button class="btn btn-info"
-                                                        data-ng-click="runCmdExact(v.id, 40, 5, 40)"
+                                                        data-ng-click="runCmdExact(v.id, 40, 6, 28)"
                                                         ><i class="fa fa-angle-double-up fa-lg"></i>
                                                 </button><br /><br />
                                                 <button class="btn btn-primary"
-                                                        data-ng-click="runCmdExact(v.id, '-', 5, 40)"
+                                                        data-ng-click="runCmdExact(v.id, '-', 6, 28)"
                                                         ><i class="fa fa-angle-down fa-lg"></i>
                                                 </button>&nbsp;
                                                 <button class="btn btn-info"
-                                                        data-ng-click="runCmdExact(v.id, 5, 0, 40)"
+                                                        data-ng-click="runCmdExact(v.id, 5, 0, 28)"
                                                         >
                                                     <i class="fa fa-angle-double-down fa-lg"></i>
                                                 </button>
@@ -424,7 +429,7 @@
                 </div>
                 <div class="modal-body">
                     <img class="widget-promo-image" ng-show="input.url" ng-src="{{input.url}}" alt="input.title"/>
-                    <div class="widget-promo-text" ng-bind="input.text"></div>
+                    <div class="widget-promo-text" ng-bind-html="input.text|toTrusted"></div>
                 </div>
             </div>
         </div>
@@ -452,8 +457,7 @@
                             </p>
 
                             <div class="camera-img">
-                                <!--<img ng-src="storage/img/test.jpg">-->
-                                <img class="text-center camera-img" src="{{input.metrics.url}}">
+                                <img class="text-center camera-img" ng-src="{{input.metrics.url}}">
                             </div>
 
                         </div>

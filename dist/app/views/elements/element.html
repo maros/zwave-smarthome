@@ -4,7 +4,7 @@
     <div ng-show="input">
         <h1><span ng-bind="_t('lb_cfg_view')"></span> <span ng-bind="input.metrics.title"></span></h1>
         <form name="form_element" id="form_element" class="form form-page" ng-submit="store(input)" novalidate>
-            <fieldset>
+            <fieldset ng-if="elementAccess(cfg.role_access.admin)">
                 <div class="form-group_">
                     <label ng-bind="_t('lb_element_name')">{{}}:</label>
                     <input name="title" id="title" type="text" class="form-control" value="{{input.metrics.title}}" placeholder="{{_t('lb_element_name')}}" ng-model="input.title" />
@@ -18,7 +18,7 @@
                         <span ng-bind="_t('lb_gen_by_module')"></span> <a class="btn btn-default btn-sm" ng-href="#module/put/{{input.cfg.hasInstance.id}}" ng-bind="input.cfg.hasInstance.moduleId"></a>
                     </div>
                     <!-- zwave -->
-                    <div class="form-group" ng-show="input.cfg.zwaveId">
+                    <div class="form-group" ng-if="input.cfg.zwaveId">
                         <div ng-if="!isMobile">
                             <span ng-bind="_t('lb_gen_by')"></span> <a href="#deviceconfig/{{input.cfg.zwaveId}}" class="btn btn-default btn-sm"><span ng-bind="_t('lb_zwave_device')"></span> #{{input.cfg.zwaveId}}</a>
                         </div>
@@ -32,18 +32,18 @@
                         <div>
                             <input type="checkbox" name="dashboard" value="{{input.dashboard}}" id="dashboard" ng-model="input.dashboard" ng-checked="input.dashboard" /> <label ng-bind="_t('lb_add_dashboard')"></label>
                         </div>
-                        <div ng-if="user.role == 1">
+                        <div ng-if="elementAccess(cfg.role_access.admin) && input.cfg.zwaveId"> 
                             <input type="checkbox" name="permanently_hidden" id="permanently_hidden" value="" 
                                    ng-model="input.permanently_hidden" 
-                                   ng-checked="input.permanently_hidden" 
-                                   ng-confirm-click="This means that you can never use this element again. Are you sure?" /> <label ng-bind="_t('lb_permanently_hide')"></label>
+                                   ng-checked="input.permanently_hidden"   
+                                   _ng-confirm-click_="This means that you can never use this element again. Are you sure?" /> <label ng-bind="_t('lb_permanently_hide')"></label>
                         </div>
                         <div>
                             <input type="checkbox" name="hide_events" value="{{input.id}}" id="hide_events" ng-model="input.hide_events" ng-checked="user.hide_single_device_events.indexOf(input.id) === -1 ? false : true" /> <label ng-bind="_t('lb_hide_events_device')"></label>
                         </div>
                     </div>
                     <!-- Rooms -->
-                    <div class="form-group form-inline">
+                    <div class="form-group form-inline" ng-if="elementAccess(cfg.role_access.admin)">
                         <label>{{_t('lb_assign_room')}} </label>
                         <select class="form-control" ng-model="input.location">
                             <!-- <option value="">--- Select one ---</option>-->
@@ -53,7 +53,7 @@
 
                 </div>
             </fieldset>
-            <fieldset  ng-if="user.role == 1">
+            <fieldset  ng-if="elementAccess(cfg.role_access.admin)">
                 <h3><i class="fa fa-chevron-down"></i> <span ng-bind="_t('lb_tags')"></span></h3>
                 
                     <div class="form-group_ clearfix">
@@ -65,7 +65,7 @@
                 
                     <div class="form-group_">
                     <div class="btn-group dropup form-inline">
-                       <input name="add_tag" id="add_tag" type="text" class="form-control" value="" placeholder="{{_t('lb_add_tag')}}" ng-model="searchText" ng-keyup="searchMe(searchText);" data-toggle="dropdown" />
+                       <input name="add_tag" id="add_tag" type="text" class="form-control" value="" placeholder="{{_t('lb_add_tag')}}" ng-model="searchText" bb-key-event="searchMe(searchText);" data-toggle="dropdown" />
                         <button type="button" class="btn btn-default btn-tag" ng-click="addTag(searchText)"><i class="fa fa-plus text-success"></i></button>
                         <ul class="dropdown-menu" ng-if="autoCompletePanel">
                             <li href="" ng-click="addTag(v)" ng-repeat="v in suggestions"><a href=""><span ng-bind="v"></span> <i class="fa fa-plus text-success"></i></a></li>
