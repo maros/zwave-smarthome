@@ -790,6 +790,16 @@ myApp.filter('stringToSlug', function () {
     };
 });
 
+/**
+ * find objects by id in array
+ */
+myApp.filter('findById', function () {
+    return function (object,id) {
+        return _.find(object,function(item) {
+            return item.id == id;
+        });
+    };
+});
 
 /**
  * Set a hardware configuration value
